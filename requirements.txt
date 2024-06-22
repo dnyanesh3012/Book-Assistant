@@ -1,0 +1,6 @@
+altair==4.2.0
+fastapi==0.68.1
+python-dotenv==0.19.0
+requests==2.26.0
+streamlit==0.87.0
+uvicorn==0.15.0

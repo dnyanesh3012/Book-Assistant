@@ -6,20 +6,20 @@ from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTempla
 from langchain_groq import ChatGroq
 import time
 
-# Load environment variables
+
 load_dotenv()
 
-# Configure Streamlit page settings
+
 st.set_page_config(
     page_title="Book Recommendation",
     page_icon="📖",  # Favicon emoji
     layout="centered",  # Page layout option
 )
 
-# Get Groq API key from environment variables
+
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-# Initialize LangChain with ChatGroq model
+
 system_message_100 = SystemMessagePromptTemplate.from_template(
     "Find the top 100 books in the {user_query} genre."
 )
@@ -60,13 +60,13 @@ book_chain_100 = LLMChain(prompt=prompt_100, llm=llm)
 book_chain_10 = LLMChain(prompt=prompt_10, llm=llm)
 book_chain_1 = LLMChain(prompt=prompt_1, llm=llm)
 
-# Initialize chat session in Streamlit if not already present
+
 if "chat_session" not in st.session_state:
     st.session_state.chat_session = []
     st.session_state.top_100_books = []
     st.session_state.top_10_books = []
 
-# Display the chatbot's title on the page
+
 st.title("📖 TaleCompass")
 
 
@@ -83,7 +83,7 @@ This application helps you find the best books in any genre using a simple step-
 Get started by selecting your favorite genre and let the agent do the rest!
 """
 
-# Display a start button
+
 if "start_button_clicked" not in st.session_state:
     st.session_state.start_button_clicked = False
 
@@ -102,23 +102,23 @@ if st.session_state.start_button_clicked:
         time.sleep(0.004)
 
 
-# Display the chat history
+
 for message in st.session_state.chat_session:
     with st.chat_message(message['role']):
         st.markdown(message['text'])
 
-# Input field for user's message
+
 user_prompt = st.chat_input("Please enter the genre...")
 
 if user_prompt:
-    # Add user's message to chat and display it
+  
     st.session_state.chat_session.append({
         'role': 'user',
         'text': user_prompt
     })
     st.chat_message("user").markdown(user_prompt)
 
-    # Process the user's query to get the top 100 books
+ 
     response_100 = book_chain_100.run({"user_query": user_prompt})
     st.session_state.chat_session.append({
         'role': 'assistant',
@@ -128,7 +128,7 @@ if user_prompt:
     st.session_state.top_100_books = response_100.split(
         '\n')  # Assuming response_100 is a newline-separated list of books
 
-    # Process to get top 10 books from top 100
+
     response_10 = book_chain_10.run({"user_query": user_prompt})
     st.session_state.chat_session.append({
         'role': 'assistant',
@@ -137,7 +137,7 @@ if user_prompt:
     st.chat_message("assistant").markdown(response_10)
     st.session_state.top_10_books = response_10.split('\n')  # Assuming response_10 is a newline-separated list of books
 
-    # Display top 10 books to user and allow them to choose one
+   
     book_choice = st.radio("Choose a book from the top 10:", st.session_state.top_10_books)
     if book_choice:
         st.session_state.chat_session.append({
@@ -153,4 +153,4 @@ if user_prompt:
         })
         st.chat_message("assistant").markdown(thank_you_message)
 
-# Code end
+

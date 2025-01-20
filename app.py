@@ -67,7 +67,7 @@ if "chat_session" not in st.session_state:
     st.session_state.top_10_books = []
 
 
-st.title("📖 SASSY BHUMIKA")
+st.title("📖 Talecompass")
 
 
 description = """
